@@ -9,7 +9,16 @@ module.exports = {
     "./app.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'poppins': ['Poppins', 'sans-serif'],
+        'montserrat': ['Monsterrat', 'sans-serif'],
+      },
+      colors: {
+        'cd-pumpkin': '#EE7B30',
+        'cd-cblue': '#8FC0A9',
+      }
+    },
   },
   plugins: [],
 }

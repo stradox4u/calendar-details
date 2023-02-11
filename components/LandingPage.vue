@@ -28,6 +28,7 @@ const reauthenticate = async () => {
   const response = await reauthenticateWithCredential(user.value, credential.value);
   console.log(response);
 }
+user
 
 
 const getCalendar = async () => {
