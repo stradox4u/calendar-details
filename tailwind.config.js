@@ -17,6 +17,7 @@ module.exports = {
       colors: {
         'cd-pumpkin': '#EE7B30',
         'cd-cblue': '#8FC0A9',
+        'cd-ruby': '#8B2635',
       }
     },
   },

@@ -1,6 +1,9 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useEventStore } from '../stores/eventStore';
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek'
+dayjs.extend(isoWeek);
 
 const eventStore = useEventStore();
 const { getEvents: events } = storeToRefs(eventStore);
@@ -11,7 +14,7 @@ watch(events, (newVal) => {
 
 const filteredEvents = computed(() => {
   return events.value?.map((event) => {
-    const attendees = event.attendees.filter((attendee) => {
+    const attendees = event.attendees?.filter((attendee) => {
       return attendee.responseStatus === 'accepted';
     }).map((el) => el.email);
     return {
@@ -24,17 +27,30 @@ const filteredEvents = computed(() => {
     };
   })
 })
+
+const sortedEvents = computed(() => {
+  const weekEventsHolder = {
+    Mon: [],
+    Tue: [],
+    Wed: [],
+    Thu: [],
+    Fri: [],
+  }
+  filteredEvents.value?.forEach((evt) => {
+    const day = dayjs(evt.start.dateTime).format('ddd');
+    weekEventsHolder[day].push(evt);
+  })
+
+  return weekEventsHolder;
+})
 </script>
 
 <template>
-  <ul>
-    <li v-for="event in filteredEvents" :key="event.id">
-      <span>Organizer: {{ event.organizer }}</span><br />
-      <span>Description: {{ event.description }}</span><br />
-      <div>Attendees:</div>
-      <p v-for="attendee in event.attendees" :key="attendee">{{ attendee }}</p>
-      <span>Summary: {{ event.summary }}</span>
-      <hr/>
-    </li>
-  </ul>
+  <div>
+    <ul class="">
+      <li v-for="(day, index) in sortedEvents" :key="index">
+        <day-events :day-events="day" :day-of-week="index"></day-events>
+      </li>
+    </ul>
+  </div>
 </template>

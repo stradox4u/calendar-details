@@ -1,4 +1,7 @@
 import { defineStore } from "pinia";
+import dayjs from "dayjs";
+import weekday from "dayjs/plugin/weekday";
+dayjs.extend(weekday);
 
 export const useEventStore = defineStore('events', () => {
   const events = ref([]);
@@ -39,11 +42,17 @@ export const useEventStore = defineStore('events', () => {
     token.value = gapi.client.getToken();
   }
 
-  function handleAuthClick() {
+  function setAccessToken(value) {
+    gapi.client.setToken(value);
+    token.value = value;
+  }
+
+  function getAccessToken() {
     tokenClient.value.callback = async (resp) => {
       if (resp.error !== undefined) {
         throw (resp);
       }
+      console.warn({ resp });
       setToken();
       await getUpcomingEvents();
     }
@@ -69,10 +78,11 @@ export const useEventStore = defineStore('events', () => {
     try {
       const request = {
         'calendarId': 'primary',
-        'timeMin': (new Date()).toISOString(),
+        'timeMin': dayjs().weekday(0).toISOString(),
+        'timeMax': dayjs().weekday(6).toISOString(),
         'showDeleted': false,
         'singleEvents': true,
-        'maxResults': 10,
+        // 'maxResults': 10,
         'orderBy': 'startTime',
       };
       const response = await gapi.client.calendar.events.list(request);
@@ -84,10 +94,11 @@ export const useEventStore = defineStore('events', () => {
 
   return {
     initGapiClient,
-    handleAuthClick,
+    getAccessToken,
     getUpcomingEvents,
     getEvents,
     handleLogout,
     token,
+    setAccessToken,
   }
 })

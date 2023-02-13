@@ -1,8 +1,10 @@
 <script setup>
+import { useUserStore } from '../stores/userStore';
 import { useEventStore } from '../stores/eventStore';
+import { storeToRefs } from 'pinia';
 
-const eventStore = useEventStore();
-const isLoggedIn = computed(() => !!eventStore.token);
+const userStore = useUserStore();
+const {isLoggedIn} = storeToRefs(userStore);
 </script>
 
 <template>
@@ -11,8 +13,8 @@ const isLoggedIn = computed(() => !!eventStore.token);
       <h1 class="font-poppins capitalize text-xl font-bold">Dev Meetings Calendar</h1>
 
       <div>
-        <ui-primary-button v-if="!isLoggedIn" button-type="button" :handle-click="eventStore.handleAuthClick">Login</ui-primary-button>
-        <ui-primary-button v-else button-type="button" :handle-click="eventStore.handleLogout">Logout</ui-primary-button>
+        <ui-primary-button v-if="!isLoggedIn" button-type="button" :handle-click="userStore.loginUser">Login</ui-primary-button>
+        <ui-primary-button v-else button-type="button" :handle-click="userStore.logoutUser">Logout</ui-primary-button>
       </div>
     </div>
   </nav>

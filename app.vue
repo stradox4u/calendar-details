@@ -1,7 +1,9 @@
 <script setup>
 import { useEventStore } from './stores/eventStore';
+import { useUserStore } from './stores/userStore';
 
 const eventStore = useEventStore();
+const userStore = useUserStore();
 const getUser = async () => {
   const response = await getCurrentUser();
   // useState('access_token', () => accessToken);
@@ -25,10 +27,10 @@ const initClient = () => {
 }
 
 onMounted(() => {
-  console.log('App.vue mounted');
+  userStore.refreshUser();
   eventStore.initGapiClient();
   setTimeout(() => {
-    eventStore.handleAuthClick();
+    eventStore.getAccessToken();
   }, 5000);
 })
 </script>

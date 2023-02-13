@@ -5,6 +5,8 @@
 <template>
   <div>
     <my-header></my-header>
-    <slot></slot>
+    <div class="max-w-4xl mx-auto">
+      <slot></slot>
+    </div>
   </div>
 </template>
