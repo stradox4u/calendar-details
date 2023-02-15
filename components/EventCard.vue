@@ -61,8 +61,8 @@ const editEvent = () => {
         <p class="font-poppins text-xs truncate">{{ event.organizer }}</p>
       </div>
     </div>
-    <div class="flex flex-col gap-3 items-stretch p-4">
-      <ui-primary-button v-if="event.attendees" button-type="button" @click="attendEvent" :is-working="isFetching">
+    <div v-if="event.attendees" class="flex flex-col gap-3 items-stretch p-4">
+      <ui-primary-button button-type="button" :handle-click="attendEvent" :is-working="isFetching">
         RSVP
       </ui-primary-button>
       <ui-primary-button button-type="button" :handle-click="editEvent">Edit</ui-primary-button>
