@@ -5,13 +5,11 @@ dayjs.extend(weekday);
 
 export const useEventStore = defineStore('events', () => {
   const events = ref([]);
-  const token = ref(null);
+  const gapi = globalThis.gapi;
 
   const getEvents = computed(() => {
     return events.value;
   });
-
-  
 
   const getUpcomingEvents = async () => {
     try {
@@ -31,8 +29,61 @@ export const useEventStore = defineStore('events', () => {
     }
   }
 
+  const rsvpEvent = async ({ eventId, userEmail }) => {
+    const eventIndex = events.value.findIndex((event) => {
+      return event.id === eventId;
+    });
+
+    const relevantEvent = events.value[eventIndex];
+    const myAttendanceIndex = relevantEvent.attendees.findIndex((attendee) => attendee.email === userEmail);
+    const accepted = { email: userEmail, responseStatus: 'accepted' };
+    events.value[eventIndex].attendees[myAttendanceIndex] = accepted;
+
+    try {
+      const request = {
+        calendarId: 'primary',
+        eventId: eventId,
+        attendees: events.value[eventIndex].attendees,
+      }
+
+      const response = await gapi.client.calendar.events.patch(request);
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  const saveAndAttend = async ({ eventId, userEmail, description }) => {
+    const eventIndex = events.value.findIndex((event) => {
+      return event.id === eventId;
+    });
+
+    const relevantEvent = events.value[eventIndex];
+    const myAttendanceIndex = relevantEvent.attendees.findIndex((attendee) => attendee.email === userEmail);
+    const accepted = { email: userEmail, responseStatus: 'accepted' };
+    events.value[eventIndex].attendees[myAttendanceIndex] = accepted;
+    events.value[eventIndex].description = description;
+
+    try {
+      const request = {
+        calendarId: 'primary',
+        eventId: eventId,
+        attendees: events.value[eventIndex].attendees,
+        description: events.value[eventIndex].description,
+      }
+
+      const response = await gapi.client.calendar.events.patch(request);
+      await navigateTo({ name: 'index' });
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return {
     getUpcomingEvents,
     getEvents,
+    rsvpEvent,
+    saveAndAttend,
   }
 })

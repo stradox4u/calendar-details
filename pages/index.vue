@@ -8,9 +8,9 @@ dayjs.extend(isoWeek);
 const eventStore = useEventStore();
 const { getEvents: events } = storeToRefs(eventStore);
 
-watch(events, (newVal) => {
-  console.log({ events: newVal });
-})
+// watch(events, (newVal) => {
+//   console.log({ events: newVal });
+// })
 
 const filteredEvents = computed(() => {
   return events.value?.map((event) => {

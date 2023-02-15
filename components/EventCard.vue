@@ -1,5 +1,8 @@
 <script setup>
 import dayjs from "dayjs";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "~~/stores/userStore";
+import { useEventStore } from "~~/stores/eventStore";
 
 const props = defineProps({
   event: {
@@ -12,13 +15,19 @@ const startTime = computed(() => {
   return dayjs(props.event?.start.dateTime).format('HH:mm')
 })
 
+const userStore = useUserStore();
+const eventStore = useEventStore();
+const { userEmail } = storeToRefs(userStore);
+const isFetching = ref(false);
+
 const attendEvent = async () => {
-  const user = await getCurrentUser();
-  console.log({ user });
+  isFetching.value = true;
+  await eventStore.rsvpEvent({ eventId: props.event.id, userEmail: userEmail.value });
+  isFetching.value = false;
 }
+
 const editEvent = () => {
-  const user = getCurrentUser();
-  console.log({ user });
+  navigateTo({ params: {id: props.event.id}, name: 'events-id' });
 }
 </script>
 
@@ -53,7 +62,9 @@ const editEvent = () => {
       </div>
     </div>
     <div class="flex flex-col gap-3 items-stretch p-4">
-      <ui-primary-button button-type="button" :handle-click="attendEvent">RSVP</ui-primary-button>
+      <ui-primary-button v-if="event.attendees" button-type="button" @click="attendEvent" :is-working="isFetching">
+        RSVP
+      </ui-primary-button>
       <ui-primary-button button-type="button" :handle-click="editEvent">Edit</ui-primary-button>
     </div>
   </div>
