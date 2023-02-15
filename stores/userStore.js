@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { signInWithPopup, signOut, GoogleAuthProvider, getAuth } from "firebase/auth";
 import { useEventStore } from "./eventStore";
 
 export const useUserStore = defineStore('users', () => {
