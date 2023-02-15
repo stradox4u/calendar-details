@@ -44,14 +44,15 @@ export const useUserStore = defineStore('users', () => {
     console.log('Logging out now!');
     GoogleAuth.signOut();
     GoogleAuth.disconnect();
+    eventStore.clearEvents();
   }
 
-  function setSigninStatus() {
-    const user = GoogleAuth.currentUser.get();
-    const authorized = user.hasGrantedScopes(scopes);
-    const email = GoogleAuth.currentUser.get().getBasicProfile().getEmail();
-    isLoggedIn.value = GoogleAuth.isSignedIn.get();
+  async function setSigninStatus() {
+    const user = await GoogleAuth.currentUser.get();
+    const authorized = await user.hasGrantedScopes(scopes);
+    isLoggedIn.value = await GoogleAuth.isSignedIn.get();
     isAuthorized.value = authorized;
+    const email = await GoogleAuth.currentUser.get().getBasicProfile()?.getEmail();
     userEmail.value = email;
 
     if (isAuthorized.value && isLoggedIn.value) {

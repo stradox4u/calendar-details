@@ -3,14 +3,18 @@ import { storeToRefs } from 'pinia';
 import { useEventStore } from '../stores/eventStore';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek'
+import { useUserStore } from '~~/stores/userStore';
 dayjs.extend(isoWeek);
 
 const eventStore = useEventStore();
 const { getEvents: events } = storeToRefs(eventStore);
 
-// watch(events, (newVal) => {
-//   console.log({ events: newVal });
-// })
+watch(events, (newVal) => {
+  console.log({ Events: newVal });
+})
+
+const userStore = useUserStore();
+const { isLoggedIn } = storeToRefs(userStore);
 
 const filteredEvents = computed(() => {
   return events.value?.map((event) => {
@@ -30,15 +34,16 @@ const filteredEvents = computed(() => {
 
 const sortedEvents = computed(() => {
   const weekEventsHolder = {
-    Mon: [],
-    Tue: [],
-    Wed: [],
-    Thu: [],
-    Fri: [],
+    Mon: { events:[]},
+    Tue: { events:[]},
+    Wed: { events:[]},
+    Thu: { events:[]},
+    Fri: { events:[]},
   }
   filteredEvents.value?.forEach((evt) => {
     const day = dayjs(evt.start.dateTime).format('ddd');
-    weekEventsHolder[day].push(evt);
+    weekEventsHolder[day].events.push(evt);
+    weekEventsHolder[day].date = dayjs(evt.start.dateTime).format('DD-MMM-YYYY');
   })
 
   return weekEventsHolder;
@@ -48,9 +53,12 @@ const sortedEvents = computed(() => {
 <template>
   <div>
     <ul v-if="events.length > 0" class="">
-      <li v-for="(day, index) in sortedEvents" :key="index">
-        <day-events :day-events="day" :day-of-week="index"></day-events>
+      <li v-for="({events, date}, index) in sortedEvents" :key="index">
+        <day-events :day-events="events" :day-of-week="index" :date-string="date"></day-events>
       </li>
     </ul>
+    <div v-if="!isLoggedIn" class="w-full my-12">
+      <p class="font-montserrat text-2xl font-semibold text-center">Login To Begin</p>
+    </div>
   </div>
 </template>

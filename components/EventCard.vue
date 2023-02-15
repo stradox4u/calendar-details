@@ -32,11 +32,11 @@ const editEvent = () => {
 </script>
 
 <template>
-  <div class="w-full h-full bg-slate-100 rounded-md shadow-md">
+  <div class="w-full h-full flex flex-col bg-slate-100 rounded-md shadow-md">
     <div class="w-full bg-cd-ruby rounded-t-md px-4 py-2">
       <h3 class="font-montserrat text-sm font-semibold text-slate-100">{{ event.summary }}</h3>
     </div>
-    <div class="p-4">
+    <div class="p-4 grow">
       <div class="w-full">
         <h4 class="font-montserrat text-sm font-semibold">Attendees:</h4>
         <ul class="w-full list-inside">
@@ -61,7 +61,7 @@ const editEvent = () => {
         <p class="font-poppins text-xs truncate">{{ event.organizer }}</p>
       </div>
     </div>
-    <div v-if="event.attendees" class="flex flex-col gap-3 items-stretch p-4">
+    <div v-if="event.attendees" class="flex flex-col gap-3 items-stretch p-4 justify-self-end">
       <ui-primary-button button-type="button" :handle-click="attendEvent" :is-working="isFetching">
         RSVP
       </ui-primary-button>

@@ -80,10 +80,15 @@ export const useEventStore = defineStore('events', () => {
     }
   }
 
+  const clearEvents = () => {
+    events.value = [];
+  }
+
   return {
     getUpcomingEvents,
     getEvents,
     rsvpEvent,
     saveAndAttend,
+    clearEvents,
   }
 })
