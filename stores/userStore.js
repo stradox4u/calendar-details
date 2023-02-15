@@ -1,38 +1,69 @@
 import { defineStore } from "pinia";
 import { signInWithPopup, signOut, GoogleAuthProvider, getAuth } from "firebase/auth";
+import { useEventStore } from "./eventStore";
 
 export const useUserStore = defineStore('users', () => {
-  const user = ref(null);
-  const token = ref('');
-  const isLoggedIn = computed(() => !!user.value)
+  const userEmail = ref('');
+  const isLoggedIn = ref(false);
+  const isAuthorized = ref(false);
+  let GoogleAuth;
+  const scopes = "https://www.googleapis.com/auth/calendar";
+  const gapi = globalThis.gapi;
+  const eventStore = useEventStore();
+  
+  function handleClientLoad() {
+    gapi.load('client:auth2', initClient);
+  }
 
-  const loginUser = () => {
-    const auth = useFirebaseAuth();
-    const provider = new GoogleAuthProvider();
-    provider.addScope('https://www.googleapis.com/auth/calendar');
-    provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+  function initClient() {
+    const discoveryUrl = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
+    gapi.client.init({
+      'apiKey': "AIzaSyDDaKPdpxCKFKPU98fagwZLJVVPfaabmVU",
+      'clientId': "121663165487-dtef1h3on975351m5qk9c959a01pknff.apps.googleusercontent.com",
+      'discoveryDocs': [discoveryUrl],
+      'scope': scopes,
+      'plugin_name': "letMeGo",
+    }).then(function () {
+      GoogleAuth = gapi.auth2.getAuthInstance();
 
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log({result})
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        token.value = credential.accessToken;
-        user.value = result.user
-      }).catch((error) => {
-        console.error(error);
+      GoogleAuth.isSignedIn.listen(updateSigninStatus);
+
+      let user = GoogleAuth.currentUser.get();
+      setSigninStatus();
     })
   }
 
-  const refreshUser = async () => {
-    const currentUser = await getCurrentUser();
-    user.value = currentUser;
-    console.log({ currentUser });
+  function handleAuthClick() {
+    if (GoogleAuth.isSignedIn.get()) {
+      GoogleAuth.signOut();
+    } else {
+      GoogleAuth.signIn();
+    }
   }
 
-  const logoutUser = async () => {
-    const auth = getAuth();
-    await signOut(auth);
-    user.value = null;
+  function revokeAccess() {
+    console.log('Logging out now!');
+    GoogleAuth.signOut();
+    GoogleAuth.disconnect();
   }
-  return { loginUser, refreshUser, user, logoutUser, isLoggedIn };
+
+  function setSigninStatus() {
+    const user = GoogleAuth.currentUser.get();
+    const authorized = user.hasGrantedScopes(scopes);
+    const email = GoogleAuth.currentUser.get().getBasicProfile().getEmail();
+    isLoggedIn.value = GoogleAuth.isSignedIn.get();
+    isAuthorized.value = authorized;
+    userEmail.value = email;
+
+    if (isAuthorized.value && isLoggedIn.value) {
+      // Fetch events
+      eventStore.getUpcomingEvents();
+    }
+  }
+
+  function updateSigninStatus() {
+    setSigninStatus();
+  }
+
+  return { handleAuthClick, revokeAccess, isLoggedIn, handleClientLoad, userEmail };
 })

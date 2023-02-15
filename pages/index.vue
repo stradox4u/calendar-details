@@ -47,7 +47,7 @@ const sortedEvents = computed(() => {
 
 <template>
   <div>
-    <ul class="">
+    <ul v-if="events.length > 0" class="">
       <li v-for="(day, index) in sortedEvents" :key="index">
         <day-events :day-events="day" :day-of-week="index"></day-events>
       </li>

@@ -27,11 +27,14 @@ const initClient = () => {
 }
 
 onMounted(() => {
-  userStore.refreshUser();
-  eventStore.initGapiClient();
-  setTimeout(() => {
-    eventStore.getAccessToken();
-  }, 5000);
+  // userStore.refreshUser();
+  // eventStore.initGapiClient();
+  // setTimeout(() => {
+  //   eventStore.getAccessToken();
+  // }, 5000);
+  nextTick(() => {
+    userStore.handleClientLoad();
+  })
 })
 </script>
 
