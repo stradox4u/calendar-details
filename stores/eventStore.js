@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import dayjs from "dayjs";
-import weekday from "dayjs/plugin/weekday";
-dayjs.extend(weekday);
+import useDayJs from "~~/composables/useDayJs";
+
 
 export const useEventStore = defineStore('events', () => {
   const events = ref([]);
   const gapi = globalThis.gapi;
+  const dayjs = useDayJs();
 
   const getEvents = computed(() => {
     return events.value;
@@ -17,9 +17,9 @@ export const useEventStore = defineStore('events', () => {
         'calendarId': 'primary',
         'timeMin': dayjs().weekday(0).toISOString(),
         'timeMax': dayjs().weekday(6).toISOString(),
+        'timezone': 10,
         'showDeleted': false,
         'singleEvents': true,
-        // 'maxResults': 10,
         'orderBy': 'startTime',
       };
       const response = await gapi.client.calendar.events.list(request);

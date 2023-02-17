@@ -1,8 +1,8 @@
 <script setup>
-import dayjs from "dayjs";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "~~/stores/userStore";
 import { useEventStore } from "~~/stores/eventStore";
+import useDayJs from "~~/composables/useDayJs";
 
 const props = defineProps({
   event: {
@@ -11,6 +11,7 @@ const props = defineProps({
   }
 })
 
+const dayjs = useDayJs();
 const startTime = computed(() => {
   return dayjs(props.event?.start.dateTime).format('HH:mm')
 })

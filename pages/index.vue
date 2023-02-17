@@ -1,10 +1,8 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useEventStore } from '../stores/eventStore';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek'
 import { useUserStore } from '~~/stores/userStore';
-dayjs.extend(isoWeek);
+import useDayJs from '~~/composables/useDayJs';
 
 const eventStore = useEventStore();
 const { getEvents: events } = storeToRefs(eventStore);
@@ -13,6 +11,7 @@ watch(events, (newVal) => {
   console.log({ Events: newVal });
 })
 
+const dayjs = useDayJs();
 const userStore = useUserStore();
 const { isLoggedIn } = storeToRefs(userStore);
 
