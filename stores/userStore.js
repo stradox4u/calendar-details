@@ -6,7 +6,8 @@ export const useUserStore = defineStore('users', () => {
   const isLoggedIn = ref(false);
   const isAuthorized = ref(false);
   let GoogleAuth;
-  const scopes = "https://www.googleapis.com/auth/calendar";
+  const appConfig = useAppConfig();
+  const scopes = appConfig.calendarScopes;
   const gapi = globalThis.gapi;
   const eventStore = useEventStore();
   
@@ -15,13 +16,13 @@ export const useUserStore = defineStore('users', () => {
   }
 
   function initClient() {
-    const discoveryUrl = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
+    const discoveryUrl = appConfig.googleDiscoveryUrl;
     gapi.client.init({
-      'apiKey': "AIzaSyDDaKPdpxCKFKPU98fagwZLJVVPfaabmVU",
-      'clientId': "121663165487-dtef1h3on975351m5qk9c959a01pknff.apps.googleusercontent.com",
+      'apiKey': appConfig.googleApiKey,
+      'clientId': appConfig.googleClientId,
       'discoveryDocs': [discoveryUrl],
       'scope': scopes,
-      'plugin_name': "letMeGo",
+      'plugin_name': appConfig.googlePluginName,
     }).then(function () {
       GoogleAuth = gapi.auth2.getAuthInstance();
 

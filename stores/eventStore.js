@@ -17,7 +17,7 @@ export const useEventStore = defineStore('events', () => {
         'calendarId': 'primary',
         'timeMin': dayjs().weekday(0).toISOString(),
         'timeMax': dayjs().weekday(6).toISOString(),
-        'timezone': 10,
+        'timezone': dayjs.tz.guess(),
         'showDeleted': false,
         'singleEvents': true,
         'orderBy': 'startTime',
