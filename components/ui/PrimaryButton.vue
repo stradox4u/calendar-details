@@ -1,20 +1,11 @@
-<script setup>
-import spinner from "../../public/loading-spinner.svg";
-const props = defineProps({
-  buttonType: {
-    type: String,
-    required: true,
-  },
-  handleClick: {
-    type: Function,
-    required: false,
-  },
-  isWorking: {
-    type: Boolean,
-    default: false,
-  }
-})
-// const spinner = 
+<script setup lang="ts">
+interface Props {
+  buttonType: 'button'|'reset'|'submit';
+  handleClick?: (arg0: MouseEvent) => void;
+  isWorking?: boolean;
+}
+const props = defineProps<Props>();
+
 </script>
 
 <template>
@@ -28,7 +19,6 @@ const props = defineProps({
         </span>
         <img v-if="isWorking" src="/loading-spinner.svg"
           class="animate-spin h-5 w-5" />
-        <!-- <svg v-if="isWorking" class="animate-spin h-5 w-5" :src="spinner"></svg> -->
       </div>
     </div>
   </button>

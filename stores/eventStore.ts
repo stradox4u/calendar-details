@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
 import useDayJs from "~~/composables/useDayJs";
+import { EventInterface } from "./eventTypes";
 
 
 export const useEventStore = defineStore('events', () => {
-  const events = ref([]);
-  const gapi = globalThis.gapi;
+  const events: Ref<EventInterface[]> = ref([]);
+  const globalContext: any = globalThis;
+  const gapi = globalContext.gapi;
   const dayjs = useDayJs();
 
   const getEvents = computed(() => {
@@ -29,7 +31,7 @@ export const useEventStore = defineStore('events', () => {
     }
   }
 
-  const rsvpEvent = async ({ eventId, userEmail }) => {
+  const rsvpEvent = async ({ eventId, userEmail }: {eventId: string, userEmail: string}) => {
     const eventIndex = events.value.findIndex((event) => {
       return event.id === eventId;
     });
@@ -53,7 +55,7 @@ export const useEventStore = defineStore('events', () => {
     }
   }
 
-  const saveAndAttend = async ({ eventId, userEmail, description }) => {
+  const saveAndAttend = async ({ eventId, userEmail, description }: {eventId: string|undefined, userEmail: string, description: string|undefined}) => {
     const eventIndex = events.value.findIndex((event) => {
       return event.id === eventId;
     });
@@ -84,7 +86,7 @@ export const useEventStore = defineStore('events', () => {
     events.value = [];
   }
 
-  const getEventsByDateRange = async ({start, end}) => {
+  const getEventsByDateRange = async ({start, end}: {start: Date, end: Date}) => {
     clearEvents();
     try {
       const request = {

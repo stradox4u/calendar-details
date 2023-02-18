@@ -1,15 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useUserStore } from "~~/stores/userStore";
 import { useEventStore } from "~~/stores/eventStore";
 import useDayJs from "~~/composables/useDayJs";
+import { FilteredEventInterface } from "~~/stores/eventTypes";
 
-const props = defineProps({
-  event: {
-    type: Object,
-    required: true,
-  }
-})
+interface Props {
+  event: FilteredEventInterface;
+}
+const props = defineProps<Props>();
 
 const dayjs = useDayJs();
 const startTime = computed(() => {

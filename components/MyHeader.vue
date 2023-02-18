@@ -1,6 +1,5 @@
-<script setup>
+<script setup lang="ts">
 import { useUserStore } from '../stores/userStore';
-import { useEventStore } from '../stores/eventStore';
 import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();

@@ -1,18 +1,13 @@
-<script setup>
-const props = defineProps({
-  dayEvents: {
-    type: Array,
-    required: true,
-  },
-  dayOfWeek: {
-    type: String,
-    required: true,
-  },
-  dateString: {
-    type: String,
-    required: true,
-  }
-})
+<script setup lang="ts">
+import { FilteredEventInterface } from '~~/stores/eventTypes';
+
+interface Props {
+  dayEvents: FilteredEventInterface[],
+  dayOfWeek: string,
+  dateString: string
+}
+
+const props = defineProps<Props>();
 </script>
 
 <template>
