@@ -1,8 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useEventStore } from '~~/stores/eventStore';
 import useWaitForLogin from '~~/composables/useWaitForLogin';
 import useDayJs from '~~/composables/useDayJs';
+import { WeekEventsInterface, FilteredEventInterface } from '~~/stores/eventTypes';
 
 definePageMeta({
   middleware: ["auth"],
@@ -30,7 +31,7 @@ watch(events, (newVal) => {
   console.log({ Events: newVal });
 })
 
-const filteredEvents = computed(() => {
+const filteredEvents: ComputedRef<FilteredEventInterface[]> = computed(() => {
   return events.value?.map((event) => {
     const attendees = event.attendees?.filter((attendee) => {
       return attendee.responseStatus === 'accepted';
@@ -48,7 +49,7 @@ const filteredEvents = computed(() => {
 
 const config = useRuntimeConfig();
 const sortedEvents = computed(() => {
-  const weekEventsHolder = {
+  const weekEventsHolder: WeekEventsInterface = {
     Mon: { events:[]},
     Tue: { events:[]},
     Wed: { events:[]},
@@ -56,7 +57,7 @@ const sortedEvents = computed(() => {
     Fri: { events:[]},
   }
   filteredEvents.value?.filter((event) => event.organizer === config.public.eventOrganizer).forEach((evt) => {
-    const day = dayjs(evt.start.dateTime).format('ddd');
+    const day = dayjs(evt.start.dateTime).format('ddd') as 'Mon'|'Tue'|'Wed'|'Thu'|'Fri';
     weekEventsHolder[day].events.push(evt);
     weekEventsHolder[day].date = dayjs(evt.start.dateTime).format('DD-MMM-YYYY');
   })

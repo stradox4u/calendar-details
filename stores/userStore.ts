@@ -5,10 +5,11 @@ export const useUserStore = defineStore('users', () => {
   const userEmail = ref('');
   const isLoggedIn = ref(false);
   const isAuthorized = ref(false);
-  let GoogleAuth;
+  let GoogleAuth: any;
   const config = useRuntimeConfig();
   const scopes = config.public.calendarScopes;
-  const gapi = globalThis.gapi;
+  const globalContext: any = globalThis;
+  const gapi = globalContext.gapi;
   const eventStore = useEventStore();
   
   function handleClientLoad() {
