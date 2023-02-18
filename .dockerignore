@@ -1,0 +1,4 @@
+node_modules
+.dockerignore
+.nuxt
+credentials.json

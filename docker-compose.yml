@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  scicovery_calendar:
+    container_name: scicovery_calendar
+    build:
+      context: ./
+      target: dev
+    volumes:
+      - ./:/app
+    ports:
+      - 3000:3000
+    command: npm run dev
