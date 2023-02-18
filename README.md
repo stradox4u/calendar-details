@@ -2,6 +2,8 @@
 
 ## Setup
 
+> Populate the `.env` file with the required values as shown in the `.env.sample`
+
 Run the following command to build the docker container
 ```bash
 docker build .
