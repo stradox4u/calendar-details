@@ -42,7 +42,7 @@ const editEvent = () => {
         <h4 class="font-montserrat text-sm font-semibold">Attendees:</h4>
         <ul class="w-full list-inside">
           <li v-for="attendee in event.attendees">
-            <p class="font-poppins text-xs truncate py-1">{{ attendee }}</p>
+            <p class="font-poppins text-xs truncate py-1">&gt;&nbsp;{{ attendee }}</p>
           </li>
         </ul>
       </div>
@@ -52,9 +52,9 @@ const editEvent = () => {
         <p class="font-poppins text-xs">{{ event.description }}</p>
       </div>
       <hr />
-      <div class="w-full">
+      <div class="w-full inline-flex gap-3 items-center">
         <h4 class="font-montserrat text-sm font-semibold">Start:</h4>
-        <p class="font-poppins text-xs text-rose-700">{{ startTime }}</p>
+        <p class="font-poppins text-2xl text-cd-ruby">{{ startTime }}</p>
       </div>
       <hr />
       <div class="w-full">
