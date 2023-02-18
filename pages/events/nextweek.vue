@@ -1,24 +1,34 @@
 <script setup>
 import { storeToRefs } from 'pinia';
-import { useEventStore } from '../stores/eventStore';
-import { useUserStore } from '~~/stores/userStore';
-import useDayJs from '~~/composables/useDayJs';
+import { useEventStore } from '~~/stores/eventStore';
 import useWaitForLogin from '~~/composables/useWaitForLogin';
+import useDayJs from '~~/composables/useDayJs';
+
+definePageMeta({
+  middleware: ["auth"],
+})
 
 const eventStore = useEventStore();
 const { getEvents: events } = storeToRefs(eventStore);
-const userStore = useUserStore();
-const { isLoggedIn } = storeToRefs(userStore);
-const waitForLogin = useWaitForLogin;
 
-onMounted(() => {
-  waitForLogin(eventStore.getUpcomingEvents);
-})
+const dayjs = useDayJs();
+const waitForLogin = useWaitForLogin;
+onMounted(async () => {
+  const nextMonday = dayjs().weekday(0).add(7, 'day').toISOString();
+  const nextFriday = dayjs().weekday(6).add(7, 'day').toISOString();
+
+  waitForLogin(
+    eventStore.getEventsByDateRange,
+    {
+    start: nextMonday,
+    end: nextFriday,
+    }
+  );
+});
+
 watch(events, (newVal) => {
   console.log({ Events: newVal });
 })
-
-const dayjs = useDayJs();
 
 const filteredEvents = computed(() => {
   return events.value?.map((event) => {
@@ -53,7 +63,9 @@ const sortedEvents = computed(() => {
 
   return weekEventsHolder;
 })
+
 </script>
+
 
 <template>
   <div>
@@ -64,15 +76,12 @@ const sortedEvents = computed(() => {
         </li>
       </ul>
       <div class="my-8">
-        <nuxt-link :to="{name: 'events-nextweek'}"
+        <nuxt-link :to="{name: 'index'}"
           class="flex justify-around bg-cd-cblue px-6 py-3 rounded-md shadow-md hover:opacity-80
           hover:shadow-xl">
-          <span class="font-montserrat text-2xl font-semibold">Next Week</span>
+          <span class="font-montserrat text-2xl font-semibold">This Week</span>
         </nuxt-link>
       </div>
-    </div>
-    <div v-if="!isLoggedIn" class="w-full my-12">
-      <p class="font-montserrat text-2xl font-semibold text-center">Login To Begin</p>
     </div>
   </div>
 </template>

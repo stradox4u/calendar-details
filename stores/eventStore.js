@@ -84,11 +84,31 @@ export const useEventStore = defineStore('events', () => {
     events.value = [];
   }
 
+  const getEventsByDateRange = async ({start, end}) => {
+    clearEvents();
+    try {
+      const request = {
+        'calendarId': 'primary',
+        'timeMin': start,
+        'timeMax': end,
+        'timezone': dayjs.tz.guess(),
+        'showDeleted': false,
+        'singleEvents': true,
+        'orderBy': 'startTime',
+      };
+      const response = await gapi.client.calendar.events.list(request);
+      events.value = response.result.items;
+    } catch (err) {
+      throw (err);
+    }
+  }
+
   return {
     getUpcomingEvents,
     getEvents,
     rsvpEvent,
     saveAndAttend,
     clearEvents,
+    getEventsByDateRange,
   }
 })

@@ -58,7 +58,7 @@ export const useUserStore = defineStore('users', () => {
 
     if (isAuthorized.value && isLoggedIn.value) {
       // Fetch events
-      eventStore.getUpcomingEvents();
+      // eventStore.getUpcomingEvents();
     }
   }
 
@@ -66,5 +66,5 @@ export const useUserStore = defineStore('users', () => {
     setSigninStatus();
   }
 
-  return { handleAuthClick, revokeAccess, isLoggedIn, handleClientLoad, userEmail };
+  return { handleAuthClick, revokeAccess, isLoggedIn, handleClientLoad, userEmail, isAuthorized };
 })
