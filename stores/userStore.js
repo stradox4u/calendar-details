@@ -6,8 +6,8 @@ export const useUserStore = defineStore('users', () => {
   const isLoggedIn = ref(false);
   const isAuthorized = ref(false);
   let GoogleAuth;
-  const appConfig = useAppConfig();
-  const scopes = appConfig.calendarScopes;
+  const config = useRuntimeConfig();
+  const scopes = config.public.calendarScopes;
   const gapi = globalThis.gapi;
   const eventStore = useEventStore();
   
@@ -16,13 +16,13 @@ export const useUserStore = defineStore('users', () => {
   }
 
   function initClient() {
-    const discoveryUrl = appConfig.googleDiscoveryUrl;
+    const discoveryUrl = config.public.googleDiscoveryUrl;
     gapi.client.init({
-      'apiKey': appConfig.googleApiKey,
-      'clientId': appConfig.googleClientId,
+      'apiKey': config.public.googleApiKey,
+      'clientId': config.public.googleClientId,
       'discoveryDocs': [discoveryUrl],
       'scope': scopes,
-      'plugin_name': appConfig.googlePluginName,
+      'plugin_name': config.public.googlePluginName,
     }).then(function () {
       GoogleAuth = gapi.auth2.getAuthInstance();
 
