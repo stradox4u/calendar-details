@@ -1,10 +1,8 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useEventStore } from '../stores/eventStore';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek'
 import { useUserStore } from '~~/stores/userStore';
-dayjs.extend(isoWeek);
+import useDayJs from '~~/composables/useDayJs';
 
 const eventStore = useEventStore();
 const { getEvents: events } = storeToRefs(eventStore);
@@ -13,6 +11,7 @@ watch(events, (newVal) => {
   console.log({ Events: newVal });
 })
 
+const dayjs = useDayJs();
 const userStore = useUserStore();
 const { isLoggedIn } = storeToRefs(userStore);
 
@@ -32,6 +31,7 @@ const filteredEvents = computed(() => {
   })
 })
 
+const appConfig = useAppConfig();
 const sortedEvents = computed(() => {
   const weekEventsHolder = {
     Mon: { events:[]},
@@ -40,7 +40,7 @@ const sortedEvents = computed(() => {
     Thu: { events:[]},
     Fri: { events:[]},
   }
-  filteredEvents.value?.forEach((evt) => {
+  filteredEvents.value?.filter((event) => event.organizer === appConfig.eventOrganizer).forEach((evt) => {
     const day = dayjs(evt.start.dateTime).format('ddd');
     weekEventsHolder[day].events.push(evt);
     weekEventsHolder[day].date = dayjs(evt.start.dateTime).format('DD-MMM-YYYY');
