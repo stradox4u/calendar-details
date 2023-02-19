@@ -4,7 +4,7 @@ import { useEventStore } from '../stores/eventStore';
 import { useUserStore } from '~~/stores/userStore';
 import useDayJs from '~~/composables/useDayJs';
 import useWaitForLogin from '~~/composables/useWaitForLogin';
-import { WeekEventsInterface, FilteredEventInterface } from '~~/stores/eventTypes';
+import { WeekEventsInterface, FilteredEventInterface } from '~~/types/events';
 
 const eventStore = useEventStore();
 const { getEvents: events } = storeToRefs(eventStore);
@@ -40,11 +40,11 @@ const filteredEvents: ComputedRef<FilteredEventInterface[]> = computed(() => {
 const config = useRuntimeConfig();
 const sortedEvents = computed(() => {
   const weekEventsHolder: WeekEventsInterface = {
-    Mon: { events:[]},
-    Tue: { events:[]},
-    Wed: { events:[]},
-    Thu: { events:[]},
-    Fri: { events:[]},
+    Mon: { events:[], date: ''},
+    Tue: { events:[], date: ''},
+    Wed: { events:[], date: ''},
+    Thu: { events:[], date: ''},
+    Fri: { events:[], date: ''},
   }
   filteredEvents.value?.filter((event) => event.organizer === config.public.eventOrganizer).forEach((evt) => {
     const day = dayjs(evt.start.dateTime).format('ddd') as 'Mon'|'Tue'|'Wed'|'Thu'|'Fri';

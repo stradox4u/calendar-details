@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import useDayJs from "~~/composables/useDayJs";
-import { EventInterface } from "./eventTypes";
+import { EventInterface } from "../types/events";
 
 
 export const useEventStore = defineStore('events', () => {

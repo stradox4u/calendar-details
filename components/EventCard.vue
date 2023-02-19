@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia";
 import { useUserStore } from "~~/stores/userStore";
 import { useEventStore } from "~~/stores/eventStore";
 import useDayJs from "~~/composables/useDayJs";
-import { FilteredEventInterface } from "~~/stores/eventTypes";
+import { FilteredEventInterface } from "~~/types/events";
 
 interface Props {
   event: FilteredEventInterface;
