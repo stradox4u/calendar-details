@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FilteredEventInterface } from '~~/stores/eventTypes';
+import { FilteredEventInterface } from '~~/types/events';
 
 interface Props {
   dayEvents: FilteredEventInterface[],

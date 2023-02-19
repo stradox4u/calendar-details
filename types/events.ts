@@ -1,3 +1,5 @@
+import { EventAttendeeInterface, EventCreatorInterface } from "./users";
+
 export interface EventListResponseInterface {
   summary: string,
   description: string,
@@ -5,26 +7,6 @@ export interface EventListResponseInterface {
   timeZone: string,
   accessRole: string,
   items: EventInterface[]
-}
-
-export interface EventCreatorInterface {
-  id?: string,
-  email: string,
-  displayName?: string,
-  self?: boolean
-}
-
-export interface EventAttendeeInterface {
-  id?: string,
-  email: string,
-  displayName?: string,
-  organizer?: boolean,
-  self?: boolean,
-  resource?: boolean,
-  optional?: boolean,
-  responseStatus: string,
-  comment?: string,
-  additionalGuests?: number,
 }
 
 export interface EventTimeInterface {
@@ -60,7 +42,7 @@ export interface FilteredEventInterface {
 
 export interface DailyEventsInterface {
   events: FilteredEventInterface[],
-  date?: string,
+  date: string,
 }
 
 export interface WeekEventsInterface {
