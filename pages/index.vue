@@ -41,7 +41,10 @@ const config = useRuntimeConfig();
 const sortedEvents = computed(() => {
   const weekEventsHolder: WeekEventsInterface<DailyEventsInterface> = {};
   filteredEvents.value?.filter((event) => event.organizer === config.public.eventOrganizer).forEach((evt) => {
-    const day = dayjs(evt.start.dateTime).format('ddd') as 'Mon'|'Tue'|'Wed'|'Thu'|'Fri';
+    const day = dayjs(evt.start.dateTime).format('ddd') as 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri';
+    if (!weekEventsHolder[day]) {
+      weekEventsHolder[day] = { events: [], date: '' };
+    }
     weekEventsHolder[day].events.push(evt);
     weekEventsHolder[day].date = dayjs(evt.start.dateTime).format('DD-MMM-YYYY');
   })
