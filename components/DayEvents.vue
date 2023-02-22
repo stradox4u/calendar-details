@@ -3,7 +3,7 @@ import { FilteredEventInterface } from '~~/types/events';
 
 interface Props {
   dayEvents: FilteredEventInterface[],
-  dayOfWeek: string,
+  dayOfWeek: string|number,
   dateString: string
 }
 

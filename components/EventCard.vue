@@ -41,7 +41,7 @@ const editEvent = () => {
         <h4 class="font-montserrat text-sm font-semibold">Attendees:</h4>
         <ul class="w-full list-inside">
           <li v-for="attendee in event.attendees">
-            <p class="font-poppins text-xs truncate py-1">&gt;&nbsp;{{ attendee }}</p>
+            <p class="font-poppins text-xs truncate py-1">&gt;&nbsp;{{ userStore.userLookup[attendee] }}</p>
           </li>
         </ul>
       </div>

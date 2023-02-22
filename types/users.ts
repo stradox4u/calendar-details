@@ -17,3 +17,7 @@ export interface EventAttendeeInterface {
   comment?: string,
   additionalGuests?: number,
 }
+
+export interface UserLookupDictionary<T> {
+  [index: string]: T;
+}
