@@ -45,10 +45,6 @@ export interface DailyEventsInterface {
   date: string,
 }
 
-export interface WeekEventsInterface {
-  Mon: DailyEventsInterface,
-  Tue: DailyEventsInterface,
-  Wed: DailyEventsInterface,
-  Thu: DailyEventsInterface,
-  Fri: DailyEventsInterface,
+export interface WeekEventsInterface<T> {
+  [key: string]: T,
 }

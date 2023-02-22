@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { UserLookupDictionary } from "~~/types/users";
 import { useEventStore } from "./eventStore";
 
 export const useUserStore = defineStore('users', () => {
@@ -67,5 +68,23 @@ export const useUserStore = defineStore('users', () => {
     setSigninStatus();
   }
 
-  return { handleAuthClick, revokeAccess, isLoggedIn, handleClientLoad, userEmail, isAuthorized };
+  const userLookup: UserLookupDictionary<string> = {
+    "caspar@labvanced.com": "Caspar",
+    "team@labvanced.com": "Labvanced",
+    "holger@labvanced.com": "Holger",
+    "mo.aarif1986@gmail.com": "Aarif",
+    "moiserushanika2006@gmail.com": "Moise",
+    "sharma1997pushpak@gmail.com": "Pushpak",
+    "stradox@gmail.com": "Umar",
+  }
+
+  return {
+    handleAuthClick,
+    revokeAccess,
+    isLoggedIn,
+    handleClientLoad,
+    userEmail,
+    isAuthorized,
+    userLookup,
+  };
 })
