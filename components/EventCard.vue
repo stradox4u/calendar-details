@@ -29,10 +29,23 @@ const attendEvent = async () => {
 const editEvent = () => {
   navigateTo({ params: {id: props.event.id}, name: 'events-id' });
 }
+
+const eventTaken = computed(() => {
+  let taken = false;
+  for (let i = 0; i < userStore.developers.length; i++) {
+    if (props.event.attendees.includes(userStore.developers[i])) {
+      taken = true;
+      break;
+    }
+  }
+
+  return taken;
+})
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col bg-slate-100 rounded-md shadow-md">
+  <div class="w-full h-full flex flex-col rounded-md shadow-md"
+    :class="[eventTaken ? 'bg-rose-200 bg-opacity-75' : 'bg-slate-100']">
     <div class="w-full bg-cd-ruby rounded-t-md px-4 py-2">
       <h3 class="font-montserrat text-sm font-semibold text-slate-100">{{ event.summary }}</h3>
     </div>
