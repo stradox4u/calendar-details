@@ -78,6 +78,13 @@ export const useUserStore = defineStore('users', () => {
     "stradox@gmail.com": "Umar",
   }
 
+  const developers: string[] = [
+    "mo.aarif1986@gmail.com",
+    "moiserushanika2006@gmail.com",
+    "sharma1997pushpak@gmail.com",
+    "stradox@gmail.com",
+  ]
+
   return {
     handleAuthClick,
     revokeAccess,
@@ -86,5 +93,6 @@ export const useUserStore = defineStore('users', () => {
     userEmail,
     isAuthorized,
     userLookup,
+    developers,
   };
 })
